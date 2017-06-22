@@ -21,5 +21,6 @@
 		<module>comment-store</module>
 		<module>logging</module>
 		<module>commons</module>
+		<module>consumer</module>
 	</modules>
 </project>

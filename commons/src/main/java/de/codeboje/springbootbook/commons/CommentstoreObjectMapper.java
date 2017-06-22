@@ -15,7 +15,7 @@ public class CommentstoreObjectMapper extends ObjectMapper {
 
 	public CommentstoreObjectMapper() {
 		super();
-		setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+		setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 		configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		setDateFormat(SDF);
 		registerModule(new JavaTimeModule());
