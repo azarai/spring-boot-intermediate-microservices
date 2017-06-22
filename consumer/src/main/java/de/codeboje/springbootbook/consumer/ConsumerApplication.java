@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.client.RestTemplate;
@@ -25,15 +24,11 @@ public class ConsumerApplication {
 	}
 
 	@Bean
-	RestTemplate restTemplate() {
+	RestTemplate restTemplate(@Value("${commentstore.auth.user}") String username,
+			@Value("${commentstore.auth.password}") String password) {
 		final RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getInterceptors().add(0, new BasicAuthorizationInterceptor("admin", "mypassword"));
+		restTemplate.getInterceptors().add(0, new BasicAuthorizationInterceptor(username, password));
 		return restTemplate;
-	}
-
-	@Bean
-	ClientHttpRequestInterceptor clientHttpRequestInterceptor(@Value("${commentstore.auth.user}") String username, @Value("${commentstore.auth.password}") String password ) {
-		return new BasicAuthorizationInterceptor(username, password);
 	}
 
 	@Bean
