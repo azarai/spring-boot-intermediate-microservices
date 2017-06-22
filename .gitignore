@@ -1,0 +1,9 @@
+.project
+.classpath
+target
+.settings
+
+spam-detection/.springBeans
+
+*.zip
+
