@@ -3,7 +3,8 @@ package de.codeboje.springbootbook.consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,20 +20,21 @@ import org.springframework.web.client.RestTemplate;
 import de.codeboje.springbootbook.commons.CommentDTO;
 
 @Service
+@RibbonClient(name = "commentstore", configuration = RibbonConfig.class)
 public class CommentService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
 
-	@Value("${commentstore.endpoint}")
-	private String endpoint;
+	private static final String ENDPOINT = "https://commentstore";
 
 	@Autowired
+	@LoadBalanced
 	private RestTemplate restTemplate;
 
 	@Retryable(maxAttempts=1)
 	public CommentDTO[] getComments(String productId) {
 		LOGGER.info("requesting comments for product {}", productId);
-		CommentDTO[] response = restTemplate.getForObject(endpoint + "/list/" + productId,
+		CommentDTO[] response = restTemplate.getForObject(ENDPOINT + "/list/" + productId,
 				new CommentDTO[0].getClass());
 
 		return response;
@@ -52,13 +54,13 @@ public class CommentService {
 
 	@Retryable(maxAttempts=5, backoff=@Backoff(delay=2000))
 	public String postComment(CommentForm comment) {
-		
+
 		LOGGER.info("posting comments for product {}", comment.getProductId());
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-		MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("emailAddress", comment.getEmailAddress());
 		map.add("comment", comment.getEmailAddress());
 		map.add("pageId", comment.getProductId());
@@ -66,8 +68,8 @@ public class CommentService {
 		;
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-		ResponseEntity<String> response = restTemplate.postForEntity( endpoint + "/create/", request , String.class );
-		
+		ResponseEntity<String> response = restTemplate.postForEntity(ENDPOINT + "/create/", request, String.class);
+
 		return response.getBody();
 	}
 }
