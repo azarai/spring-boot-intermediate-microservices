@@ -22,5 +22,6 @@
 		<module>logging</module>
 		<module>commons</module>
 		<module>consumer</module>
+		<module>registry</module>
 	</modules>
 </project>

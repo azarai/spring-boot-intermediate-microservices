@@ -5,6 +5,7 @@ import javax.servlet.Filter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -27,6 +28,7 @@ import de.codeboje.springbootbook.logging.RequestContextLoggingFilter;
 //@EnableJpaRepositories(basePackages= {"de.codeboje.springbootbook"})
 @EntityScan(basePackages= {"de.codeboje.springbootbook"})
 @ImportResource(value={"classpath*:legacy-context.xml"})
+@EnableEurekaClient
 public class CommentStoreApp {
 
     /**

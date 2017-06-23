@@ -16,7 +16,7 @@ public class RibbonConfig {
 
 	@Bean
 	public IPing ribbonPing(IClientConfig config) {
-		return new PingUrl(true, "/application/info");
+		return new PingUrl(false, "/application/info");
 	}
 
 	@Bean

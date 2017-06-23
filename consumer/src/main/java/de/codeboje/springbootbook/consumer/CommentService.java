@@ -9,9 +9,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -27,7 +24,7 @@ public class CommentService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
 
-	private static final String ENDPOINT = "https://commentstore";
+	private static final String ENDPOINT = "http://commentstore";
 
 	@Autowired
 	@LoadBalanced
