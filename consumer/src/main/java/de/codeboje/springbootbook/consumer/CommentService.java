@@ -35,7 +35,7 @@ public class CommentService {
 
 		MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 		map.add("emailAddress", comment.getEmailAddress());
-		map.add("comment", comment.getEmailAddress());
+		map.add("comment", comment.getComment());
 		map.add("pageId", comment.getProductId());
 		map.add("username", comment.getUsername());
 		;
