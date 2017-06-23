@@ -17,6 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import de.codeboje.springbootbook.commons.CommentDTO;
 
 @Service
@@ -31,7 +33,7 @@ public class CommentService {
 	@LoadBalanced
 	private RestTemplate restTemplate;
 
-	@Retryable(maxAttempts=1)
+	@HystrixCommand(fallbackMethod = "recover")
 	public CommentDTO[] getComments(String productId) {
 		LOGGER.info("requesting comments for product {}", productId);
 		CommentDTO[] response = restTemplate.getForObject(ENDPOINT + "/list/" + productId,
@@ -39,20 +41,18 @@ public class CommentService {
 
 		return response;
 	}
-	
-	@Recover
-	public CommentDTO[] recover(Throwable e, String productId) {
-		LOGGER.info("requesting comments for product {} failed, retries exceeded", productId);
+
+	public CommentDTO[] recover(String productId) {
+		LOGGER.info("requesting comments for product {} failed, Hystrix aborted", productId);
 		return new CommentDTO[0];
 	}
 
-	@Recover()
-	public String recoverPost(Throwable e, CommentForm comment) {
-		LOGGER.info("posting comments for product {} failed, retries exceeded", comment.getProductId());
+	public String recoverPost(CommentForm comment) {
+		LOGGER.info("posting comments for product {} failed, Hystrix aborted", comment.getProductId());
 		return "";
 	}
 
-	@Retryable(maxAttempts=5, backoff=@Backoff(delay=2000))
+	@HystrixCommand(fallbackMethod = "recoverPost")
 	public String postComment(CommentForm comment) {
 
 		LOGGER.info("posting comments for product {}", comment.getProductId());
@@ -62,7 +62,7 @@ public class CommentService {
 
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("emailAddress", comment.getEmailAddress());
-		map.add("comment", comment.getEmailAddress());
+		map.add("comment", comment.getComment());
 		map.add("pageId", comment.getProductId());
 		map.add("username", comment.getUsername());
 		;
