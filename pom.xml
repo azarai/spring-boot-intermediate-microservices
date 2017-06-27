@@ -24,5 +24,7 @@
 		<module>consumer</module>
 		<module>registry</module>
 		<module>gateway</module>
+<module>config</module>
+<module>config</module>
 	</modules>
 </project>
