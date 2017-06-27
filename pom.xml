@@ -23,5 +23,6 @@
 		<module>commons</module>
 		<module>consumer</module>
 		<module>registry</module>
+		<module>gateway</module>
 	</modules>
 </project>
