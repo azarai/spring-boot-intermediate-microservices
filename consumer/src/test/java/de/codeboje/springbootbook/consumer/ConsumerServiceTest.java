@@ -40,13 +40,18 @@ public class ConsumerServiceTest {
 	public void whenGetComments_thenReturnEmpty() {
 		
 		final String productId = "product4712";
-		this.server.expect(requestTo(endpoint + "/list/" + productId))
-        .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+		this.server.expect(
+				requestTo(endpoint + "/list/" + productId)
+		)
+        .andRespond(
+        		withSuccess("[]", MediaType.APPLICATION_JSON)
+        );
 		
 		CommentDTO[] comments = commentService.getComments(productId);
 		
 		assertEquals(0, comments.length);
  
+		server.verify();
 	}
 	
 	@Test
