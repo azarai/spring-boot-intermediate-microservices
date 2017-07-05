@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +18,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import de.codeboje.springbootbook.commons.CommentDTO;
 
 @Service
-@RibbonClient(name = "commentstore", configuration = RibbonConfig.class)
 public class CommentService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
